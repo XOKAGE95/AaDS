@@ -1,69 +1,115 @@
+п»ї#define _CRT_SECURE_NO_WARNINGS
+//#include "stdafx.h"
 #include <iostream>
 #include <exception>
-#include<math.h>
+#include <math.h>
 #include <ctime>
+#include <string>
 
 using namespace std;
 
-/*Создайте шаблон функции transpose(),
-выполняющей транспонирование квадратной матрицы.
-В качестве параметров шаблона используйте тип элементов T
-и размер матрицы n.
-Продемонстрируйте работу шаблона для различных
-типов элементов и размеров матриц.*/
+/*Г‘Г®Г§Г¤Г Г©ГІГҐ ГёГ ГЎГ«Г®Г­ ГґГіГ­ГЄГ¶ГЁГЁ transpose(),
+ГўГ»ГЇГ®Г«Г­ГїГѕГ№ГҐГ© ГІГ°Г Г­Г±ГЇГ®Г­ГЁГ°Г®ГўГ Г­ГЁГҐ ГЄГўГ Г¤Г°Г ГІГ­Г®Г© Г¬Г ГІГ°ГЁГ¶Г».
+Г‚ ГЄГ Г·ГҐГ±ГІГўГҐ ГЇГ Г°Г Г¬ГҐГІГ°Г®Гў ГёГ ГЎГ«Г®Г­Г  ГЁГ±ГЇГ®Г«ГјГ§ГіГ©ГІГҐ ГІГЁГЇ ГЅГ«ГҐГ¬ГҐГ­ГІГ®Гў T
+ГЁ Г°Г Г§Г¬ГҐГ° Г¬Г ГІГ°ГЁГ¶Г» n.
+ГЏГ°Г®Г¤ГҐГ¬Г®Г­Г±ГІГ°ГЁГ°ГіГ©ГІГҐ Г°Г ГЎГ®ГІГі ГёГ ГЎГ«Г®Г­Г  Г¤Г«Гї Г°Г Г§Г«ГЁГ·Г­Г»Гµ
+ГІГЁГЇГ®Гў ГЅГ«ГҐГ¬ГҐГ­ГІГ®Гў ГЁ Г°Г Г§Г¬ГҐГ°Г®Гў Г¬Г ГІГ°ГЁГ¶.*/
 
 
 template <typename T>
 T **Transpose(T **arr1, int n)
 {
-    n = sqrt(n);
-    T **arr2 = new T*[n];
-    for (int i = 0; i < n; i++)
-        arr2[i] = new T[n];
-    for (int i = 0; i < n; i ++)
-        for (int j = 0; j < n; j++)
-            arr2[i][j] = arr1[j][i];
-    return arr2;
+	T **arr2 = new T*[n];
+	for (int i = 0; i < n; i++)
+		arr2[i] = new T[n];
+	for (int i = 0; i < n; i++)
+		for (int j = 0; j < n; j++)
+			arr2[i][j] = arr1[j][i];
+	return arr2;
 }
 
 template <typename T>
-void Display (T **arr, int n)
+void Display(T **arr, int n)
 {
-    cout << "Your array: " << endl;
-    for (int i = 0; i < sqrt(n); i++)
-    {
-        for (int j = 0; j < sqrt(n); j++)
-        {
-            cout << arr[i][j] << "\t";
-        }
-        cout << endl;
-    }
+	cout << "Your array: " << endl;
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < n; j++)
+		{
+			cout << arr[i][j] << "\t";
+		}
+		cout << endl;
+	}
 }
 
 template <typename T>
 T **RandomArray(int n)
 {
-    n = sqrt(n);
-    srand( time(NULL) );
-    T **arr = new T*[n];
-    for (int i = 0; i < n; i++)
-        arr[i] = new T[n];
-    for (int i = 0; i < n; i++)
-        for (int j =0; j < n; j++)
-    arr[i][j] = T(rand() % 100);
-    return arr;
+	srand(time(NULL));
+	T **arr = new T*[n];
+	for (int i = 0; i < n; i++)
+		arr[i] = new T[n];
+	for (int i = 0; i < n; i++)
+		for (int j = 0; j < n; j++)
+			arr[i][j] = T((rand() % 100) / float(rand() % 10+1)) + 1.0;
+	return arr;
 }
 
-int main ()
+template <typename T>
+T **CreateArray(int n)
 {
-    int n = 25;
-    cout << "enter n: ";
-    cin >> n;
-    float **array1 = RandomArray<float>(n);
-    Display(array1, n);
-    Display(Transpose(array1, n), n);
-    n = sqrt(n);
-    for (int i = 0; i < n; i++)
-    delete [] array1[i];
-    return 0;
+	T **arr = new T*[n];
+	for (int i = 0; i < n; i++)
+		arr[i] = new T[n]; 
+	for (int i = 0; i < n; i++)
+		for (int j = 0; j < n; j++)
+		{
+			cout << "Enter a[" << i << "][" << j << "] : ";
+			cin >> arr[i][j];
+		}
+	return arr;
+}
+int main()
+{
+	int n = 0;
+	cout << "enter n: ";
+	cin >> n;
+	cout << "Enter type: ";
+	string TypeA;
+	cin >> TypeA;
+	if (TypeA == "double")
+	{
+		double **array1 = CreateArray<double>(n);
+		Display(array1, n);
+		Display(Transpose(array1, n), n);
+		for (int i = 0; i < n; i++)
+			delete[] array1[i];
+	}
+	else if (TypeA == "int")
+	{
+		int **array1 = RandomArray<int>(n);
+		Display(array1, n);
+		Display(Transpose(array1, n), n);
+		for (int i = 0; i < n; i++)
+			delete[] array1[i];
+	}
+	else if (TypeA == "char")
+	{
+		char **array1 = CreateArray<char>(n);
+		Display(array1, n);
+		Display(Transpose(array1, n), n);
+		for (int i = 0; i < n; i++)
+			delete[] array1[i];
+	}
+	else if (TypeA == "float")
+	{
+		float **array1 = RandomArray<float>(n);
+		Display(array1, n);
+		Display(Transpose(array1, n), n);
+		for (int i = 0; i < n; i++)
+			delete[] array1[i];
+	}
+	else return 0;
+	system("pause");
+	return 0;
 }
